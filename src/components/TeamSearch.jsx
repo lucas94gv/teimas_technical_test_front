@@ -6,11 +6,13 @@ export default function TeamSearch() {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [successMsg, setSuccessMsg] = useState("");
 
   const handleSearch = async () => {
     if (!query) return;
     setLoading(true);
     setError(null);
+    setSuccessMsg("");
 
     try {
       const response = await api.get("/teams/search", {
@@ -24,6 +26,20 @@ export default function TeamSearch() {
       setLoading(false);
     }
   };
+
+  const handleFavorite = async (teamId) => {
+    setError(null);
+    setSuccessMsg("");
+    try {
+        const response = await api.post("/teams/select", { team_id: teamId });
+        console.log("RESPONSE FAVORITE:", response.data);
+        const addedTeamId = response.data.data.team_id || response.data.data.attributes?.team_id;
+        setSuccessMsg(`Equipo ${addedTeamId} agregado a favoritos ✅`);
+    } catch (err) {
+        console.error(err);
+        setError("No se pudo agregar a favoritos");
+    }
+    };
 
   return (
     <div>
@@ -39,11 +55,13 @@ export default function TeamSearch() {
       </button>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
+      {successMsg && <p style={{ color: "green" }}>{successMsg}</p>}
 
       <ul>
         {teams.map((teamObj) => (
           <li key={teamObj.team.id}>
-            {teamObj.team.name} ({teamObj.team.country})
+            {teamObj.team.name} ({teamObj.team.country}){" "}
+            <button onClick={() => handleFavorite(teamObj.team.id)}>⭐ Favorito</button>
           </li>
         ))}
       </ul>
