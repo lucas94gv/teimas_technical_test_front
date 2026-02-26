@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 export default function Favorites() {
+  const navigate = useNavigate();
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,7 +35,7 @@ export default function Favorites() {
       });
 
       setTeams((prevTeams) =>
-        prevTeams.filter((teamObj) => teamObj.team.id !== teamId)
+        prevTeams.filter((teamObj) => teamObj.id !== teamId)
       );
 
       setSuccessMsg("Equipo eliminado de favoritos");
@@ -51,19 +53,54 @@ export default function Favorites() {
       {error && <p style={{ color: "red" }}>{error}</p>}
       {successMsg && <p style={{ color: "green" }}>{successMsg}</p>}
 
-      <ul>
+      <ul style={{ listStyle: "none", padding: 0 }}>
         {teams.map((teamObj) => (
-          <li key={teamObj.team.id}>
-            <img
-              src={teamObj.team.logo}
-              alt={teamObj.team.name}
-              width={40}
-            />
-            {teamObj.team.name} ({teamObj.team.country}){" "}
+          <li
+            key={teamObj.id}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "15px",
+              border: "1px solid #ddd",
+              padding: "10px",
+              borderRadius: "8px",
+            }}
+          >
+
+            {teamObj.logo && (
+              <img
+                src={teamObj.logo}
+                alt={teamObj.name}
+                width={40}
+                style={{ marginRight: "10px" }}
+              />
+            )}
+
+            <div style={{ flexGrow: 1 }}>
+              <strong>{teamObj.name || "Nombre no disponible"}</strong>{" "}
+              ({teamObj.country?.name || "País desconocido"})
+            </div>
+
             <button
-              onClick={() => handleDeselect(teamObj.team.id)}
+              onClick={() => navigate("/dashboard/fixtures", { state: { teamId: teamObj.id } })}
+              style={{ marginLeft: "10px", padding: "5px 10px", cursor: "pointer" }}
             >
-              🗑 Eliminar
+              Ver Partidos 📅
+            </button>
+
+            <button
+              onClick={() => handleDeselect(teamObj.id)}
+              style={{
+                marginLeft: "10px",
+                padding: "5px 10px",
+                cursor: "pointer",
+                backgroundColor: "#ff4d4f",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+              }}
+            >
+              Eliminar ❌
             </button>
           </li>
         ))}

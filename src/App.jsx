@@ -4,6 +4,7 @@ import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import TeamSearch from "./components/TeamSearch";
 import Favorites from "./components/Favorites";
+import Fixtures from "./components/Fixtures";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 
@@ -41,6 +42,7 @@ function App() {
           {/* Rutas internas del Dashboard */}
           <Route path="search" element={<TeamSearch />} />
           <Route path="favorites" element={<Favorites />} />
+          <Route path="fixtures" element={<Fixtures />} /> {/* 🔹 Ruta arreglada */}
         </Route>
       </Routes>
     </BrowserRouter>
