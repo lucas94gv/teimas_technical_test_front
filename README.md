@@ -6,8 +6,8 @@ Aplicación frontend desarrollada en React que consume la API de Football App.
 
 ## 🛠 Tecnologías
 
-- Node.js 18+  
-- React 18  
+- Node 22.20.0
+- React 19.2.4
 - Vite  
 - React Router DOM  
 - Axios  
