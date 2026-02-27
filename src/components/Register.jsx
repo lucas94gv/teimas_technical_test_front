@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "./Login.css"; // Reutilizamos el CSS de Login
 
 export default function Register() {
   const navigate = useNavigate();
@@ -9,80 +10,65 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
     try {
-      const response = await api.post("/register", {
-        name,
-        email,
-        password,
-      });
-
+      const response = await api.post("/register", { name, email, password });
       const token = response.data.data.token;
-
-      // Guardamos token
       localStorage.setItem("token", token);
-
+      setSuccess("Registrado correctamente!");
       navigate("/dashboard");
-
     } catch (err) {
       console.log("REGISTER ERROR:", err);
-
       const backendError =
         err.response?.data?.errors?.[0] || "Error al registrarse";
-
       setError(backendError);
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto" }}>
-      <h2>Registro</h2>
-
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-title">Registro</h2>
+        <form onSubmit={handleSubmit} className="login-form">          
+          <label>Nombre:</label>
           <input
             type="text"
-            placeholder="Nombre"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
-        </div>
 
-        <div style={{ marginTop: 10 }}>
+          <label>Email:</label>
           <input
             type="email"
-            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </div>
 
-        <div style={{ marginTop: 10 }}>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div className="input-group">
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit" style={{ marginTop: 20 }}>
-          Registrarse
-        </button>
-      </form>
-
-      {error && (
-        <p style={{ color: "red", marginTop: 10 }}>
-          {error}
-        </p>
-      )}
+          <button type="submit" className="login-button">
+            Registrarse
+          </button>
+        </form>
+        {error && <p className="error">{error}</p>}
+        {success && <p className="success">{success}</p>}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import "./Dashboard.css";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -11,11 +12,13 @@ export default function Dashboard() {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div className="dashboard-container">
       <Sidebar />
 
-      <div style={{ flex: 1, padding: "1rem" }}>
-        <button onClick={handleLogout}>Cerrar sesión</button>
+      <div className="dashboard-content">
+        <button className="logout-button" onClick={handleLogout}>
+          Cerrar sesión
+        </button>
         <h2>Dashboard</h2>
         <p>Bienvenido a tu aplicación de fútbol ⚽</p>
         <Outlet />

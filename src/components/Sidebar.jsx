@@ -1,17 +1,28 @@
 import { NavLink } from "react-router-dom";
+import "./Sidebar.css";
 
 export default function Sidebar() {
   return (
-    <nav style={{ width: 200, borderRight: "1px solid #ccc", padding: "1rem" }}>
-      <h3>Menú</h3>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+    <nav className="sidebar">
+      <h3 className="sidebar-title">Menú</h3>
+      <ul className="sidebar-list">
         <li>
-          <NavLink to="/dashboard/search" style={{ textDecoration: "none" }}>
+          <NavLink
+            to="/dashboard/search"
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
             Buscar equipos
           </NavLink>
         </li>
         <li>
-          <NavLink to="/dashboard/favorites" style={{ textDecoration: "none" }}>
+          <NavLink
+            to="/dashboard/favorites"
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
             Equipos favoritos
           </NavLink>
         </li>
